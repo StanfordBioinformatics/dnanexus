@@ -6,13 +6,12 @@
 #nathankw@stanford.edu
 ###
 
-module load dx-toolkit/0.193.0
-source $DXTOOLKIT
+source $DXT #set by env. module dx-toolkit/dx-toolit, which is loaded by env. module gbsc/dnanexus/current
 module load jq/1.5
 
 set -eu -o pipefail
 
-dx_user_conf=dnanexus_conf.json 
+dx_user_conf=$(dirname $0)/dnanexus_conf.json 
 
 function help() {
 	echo "Program:"
@@ -40,13 +39,9 @@ then
 	exit 1
 fi
 
-echo $username 
-
 auth_token=$(jq -r ".${username}" $dx_user_conf)
 
-echo $auth_token
-
-dx login --token $auth_token
+dx login --token $auth_token --noprojects
 
 dx whoami
 
