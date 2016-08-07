@@ -1,8 +1,6 @@
 import os
 import json
 
-from . import seqresults 
-
 package_path = __path__[0]
 CONF_FILE = os.path.join(package_path,"dnanexus_conf.json")
 
