@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+
+###
+#Nathaniel Watson
+#Stanford School of Medicine
+#August 17, 2016
+#nathankw@stanford.edu
+###
+
 import os
 import sys
 from argparse import ArgumentParser
