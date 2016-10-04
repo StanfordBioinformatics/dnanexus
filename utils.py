@@ -1,7 +1,7 @@
-import dnanexus_seqresults
+import gbsc/gbsc_dnanexus #environment module gbsc/gbsc_dnanexus/current
 
-CONF_FILE = dnanexus_seqresults.CONF_FILE
-JSON_CONF = dnanexus_seqresults.JSON_CONF
+CONF_FILE = gbsc_dnanexus.CONF_FILE
+JSON_CONF = gbsc_dnanexus.JSON_CONF
 
 class UnknownDNAnexusUsername(Exception):
 	pass

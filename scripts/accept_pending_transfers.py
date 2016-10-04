@@ -15,10 +15,12 @@ import logging
 
 import dxpy
 
+import gbsc_dnanexus
 
-#The environment module gbsc/dnanexus/current should also be loaded in order to log into DNAnexus
 
-DX_LOGIN_CONF = os.getenv("DX_LOGIN_CONF") #exported by the env module gbsc/dnanexus_seqresults
+#The environment module gbsc/gbsc_dnanexus/current should also be loaded in order to log into DNAnexus
+
+DX_LOGIN_CONF = gbsc_dnanexus.CONF_FILE
 
 description = "Given all pending DNAnexus project transfers for the specified user, allows the user to accept transfers under a specified billing account, but not just any project. Only projects that have the specified queue (set in the queue property of the project) will be transferred to the user."
 parser = ArgumentParser(description=description)
@@ -31,7 +33,7 @@ org = args.org
 user = args.user_name
 level = args.access_level
 
-#LOG into DNAnexus (The environment module gbsc/dnanexus_seqresults should also be loaded in order to log into DNAnexus)
+#LOG into DNAnexus (The environment module gbsc/gbsc_dnanexus should also be loaded in order to log into DNAnexus)
 subprocess.check_call("log_into_dnanexus.sh -u {du}".format(du=user),shell=True)
 internal_dx_username = "user-" + user
 

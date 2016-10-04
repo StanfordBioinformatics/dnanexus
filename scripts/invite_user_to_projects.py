@@ -15,10 +15,12 @@ import logging
 
 import dxpy
 
+import gbsc_dnanexus
 
-#The environment module gbsc/dnanexus/current should also be loaded in order to log into DNAnexus
 
-DX_LOGIN_CONF = os.getenv("DX_LOGIN_CONF") #exported by the env module gbsc/dnanexus_seqresults
+#The environment module gbsc/gbsc_dnanexus/current should also be loaded in order to log into DNAnexus
+
+DX_LOGIN_CONF = gbsc_dnanexus.CONF_FILE
 
 description = "Invites a DNAnexus user to be a member of all projects billed to a the specified org, with the specified access level."
 parser = ArgumentParser(description=description)
@@ -33,7 +35,7 @@ user = args.user_name
 level = args.access_level
 created_after = args.created_after
 
-#LOG into DNAnexus (The environment module gbsc/dnanexus_seqresults should also be loaded in order to log into DNAnexus)
+#LOG into DNAnexus (The environment module gbsc/gbsc_dnanexus should also be loaded in order to log into DNAnexus)
 subprocess.check_call("log_into_dnanexus.sh -u {du}".format(du=user),shell=True)
 internal_dx_username = "user-" + user
 
@@ -64,3 +66,5 @@ for i in gen:
 		project = dxpy.DXProject(i["id"])
 		project.invite(invitee=internal_dx_username,level=level,send_email=False)
 		logger.info("Invited {user} to {project_name} with level {level}.".format(user=internal_dx_username,project_name=project.name,level=level))	
+
+
