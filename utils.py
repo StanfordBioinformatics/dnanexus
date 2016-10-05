@@ -7,49 +7,79 @@ import gbsc_dnanexus #environment module gbsc/gbsc_dnanexus/current
 CONF_FILE = gbsc_dnanexus.CONF_FILE
 JSON_CONF = gbsc_dnanexus.JSON_CONF
 
+DX_USER_PREFIX = "user-"
+DX_ORG_PREFIX = "org-"
+
 class UnknownDNAnexusUsername(Exception):
 	pass
 
 class InvalidAuthToken(Exception):
 	pass
 
-def validate_username(dnanexus_username,exception=False):
+def strip_dx_userprefix(dx_username):
+	if dx_username.startswith(DX_USER_PREFIX):
+		dx_username = dx_username.split(DX_USER_PREFIX)[1]
+	return dx_username
+
+def add_dx_userprefix(dx_username):
+	if not dx_username.startswith(DX_USER_PREFIX):
+		dx_username = DX_USER_PREFIX + dx_username
+	return dx_username
+
+def strip_dx_orgprefix(org):
+	if org.startswith(DX_ORG_PREFIX):
+		org = org.split(DX_ORG_PREFIX)[1]
+	return org
+
+def add_dx_orgprefix(org):
+	if not org.startswith(DX_ORG_PREFIX):
+		org = DX_ORG_PREFIX + org
+	return org
+
+def validate_username(dx_username,exception=False):
 	"""
 	Function : Checks to see if the supplied username appears in the dnanexus_conf.json configuration file and has an authentication token associated with it.
-  Args     : dnanexus_username - str. The DNAnexus login name.
-						 exception - bool. When set to true, a gbsc_dnanexus.utils.UnknownDNAnexusUsername() will be raised if 'dnanexus_username' doesn't appear in dnanexus_conf.json. 
-												 gbsc_dnanexus.utils.InvalidAuthToken() will be instead raised if 'dnanexus_username' does appear in dnanexus_conf.json, but there isn't an 
+  Args     : dx_username - str. The DNAnexus login name.
+						 exception - bool. When set to true, a gbsc_dnanexus.utils.UnknownDNAnexusUsername() will be raised if 'dx_username' doesn't appear in dnanexus_conf.json. 
+												 gbsc_dnanexus.utils.InvalidAuthToken() will be instead raised if 'dx_username' does appear in dnanexus_conf.json, but there isn't an 
 												 associated API token. If 'exception' is set to False, then False will be returned rather than raising either of these exceptions.
 	Returns  : bool.
 	Raises   : If 'exception' is set to True, a gbsc_dnanexus.utils.UnknownDNAnexusUsername() exception or a gbsc_dnanexus.utils.InvalidAuthToken() exception could be raised.
 	"""
-	if dnanexus_username.startswith("user-"):
-		dnanexus_username = dnanexus_username.split("user-")[1]
-
-	if dnanexus_username not in JSON_CONF:
+	dx_username = strip_dx_userprefix(dx_username)
+	if dx_username not in JSON_CONF:
 		if not exception:
 			return False
 		else:
-			raise UnknownDNAnexusUsername("{username} is not recognized. Please make sure that the username is entered into {CONF_FILE}".format(username=dnanexus_username,CONF_FILE=CONF_FILE))
-	if not JSON_CONF[dnanexus_username]:
+			raise UnknownDNAnexusUsername("{username} is not recognized. Please make sure that the username is entered into {CONF_FILE}".format(username=dx_username,CONF_FILE=CONF_FILE))
+	if not JSON_CONF[dx_username]:
 		if not exception:
 			return False
 		else:
-			raise InvalidAuthToken("{username} does exist in {CONF_FILE}, but it doesn't have an authentication token specified.".format(username=dnanexus_username,CONF_FILE=CONF_FILE))
+			raise InvalidAuthToken("{username} does exist in {CONF_FILE}, but it doesn't have an authentication token specified.".format(username=dx_username,CONF_FILE=CONF_FILE))
 	return True
 
 
-class Utils:
-	def __init__(self,dx_user_name):
-		"""
-		Args : dx_user_name - The login name of the DNAnexus user.
-		"""
-		if dx_user_name.startswith("user-"):
-			dx_user_name = dx_user_name.split("user-1")[1]
+def log_into_dnanexus(dx_username):
+	""" 
+	Function : Logs a user into DNAnexus.
+	Args     : dx_username - str. The login name of a DNAnexus user.
+	Returns  : None.
+	Raises   : subprocess.CalledProcessError if logging in fails.
+	"""
+	dx_username = strip_dx_userprefix(dx_username)	
+	validate_username(dx_username,exception=True)
 
-		validate_username(dx_user_name,exception=True)
-		subprocess.check_call("log_into_dnanexus.sh -u {}".format(dx_user_name),shell=True)
-		self.dx_user_name = "user-" + dx_user_name
+	#"module load gbsc/dnanexus/current" to get the script log_into_dnanexus.sh
+	subprocess.check_call("log_into_dnanexus.sh -u {du}".format(du=self.dx_username),shell=True)
+
+class Utils:
+	def __init__(self,dx_username):
+		"""
+		Args : dx_username - The login name of the DNAnexus user.
+		"""
+		log_into_dnanexus(dx_username)
+		self.dx_username = DX_USER_PREFIX + dx_username
 
 	def invite_user_to_org_projects(self,org,created_after,access_level):
 		"""
