@@ -2,7 +2,7 @@ import subprocess
 
 import dxpy
 
-import gbsc/gbsc_dnanexus #environment module gbsc/gbsc_dnanexus/current
+import gbsc_dnanexus #environment module gbsc/gbsc_dnanexus/current
 
 CONF_FILE = gbsc_dnanexus.CONF_FILE
 JSON_CONF = gbsc_dnanexus.JSON_CONF
@@ -40,7 +40,7 @@ def validate_username(dnanexus_username,exception=False):
 
 
 class Utils:
-	def __init__(dx_user_name):
+	def __init__(self,dx_user_name):
 		"""
 		Args : dx_user_name - The login name of the DNAnexus user.
 		"""
@@ -51,7 +51,7 @@ class Utils:
 		subprocess.check_call("log_into_dnanexus.sh -u {}".format(dx_user_name),shell=True)
 		self.dx_user_name = "user-" + dx_user_name
 
-	def invite_user_to_org_projects(org,created_after,access_level):
+	def invite_user_to_org_projects(self,org,created_after,access_level):
 		"""
 		Function :
 		Args     : created_after : Date (e.g. 2012-01-01) or integer timestamp after which the project was created (negative number means in the past, or use suffix s, m, h, d, w, M, y)")
@@ -62,24 +62,19 @@ class Utils:
 		if not org.startswith("org-"):
 			org = "org-" + org
 
-		projects_invited_to = []
+		#get projects since created_after date
 		gen = dxpy.org_find_projects(org_id=org,created_after=created_after)
+		import pdb
+		pdb.set_trace()
+		#gen is a generator of dicts of the form 
+		# {u'level': u'NONE', u'id': u'project-ByQ8kj8028GJ182PZx95Z3G2', u'public': False}
+		projects_invited_to = []
 		for i in gen:
-		  current_level = i["level"]
-		  if current_level != access_level:
-		    project = dxpy.DXProject(i["id"])
-		    project.invite(invitee=internal_dx_username,level=level,send_email=False)
-		    logger.info("Invited {user} to {project_name} with level {level}.".format(user=internal_dx_username,project_name=project.name,level=level))	
+			current_level = i["level"]
+			if current_level != access_level:
+				project = dxpy.DXProject(i["id"])
+				project.invite(invitee=internal_dx_username,level=access_level,send_email=False)
 				projects_invited_to.append(project.name)
 		return projects_invited_to
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
