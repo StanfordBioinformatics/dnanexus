@@ -1,4 +1,5 @@
-#!/bin/bash -eu
+#!/bin/bash -e
+#can't set the -u flag because the dnanexus environment.sh script sets unbound variables that will trigger an error.
 
 ###
 #Nathaniel Watson
@@ -50,5 +51,5 @@ auth_token=$(jq -r ".${username}" ${DX_LOGIN_CONF})
 
 dx login --token $auth_token --noprojects
 
-dx whoami
+echo "Successfully logged into DNAnexus as $(dx whoami)"
 

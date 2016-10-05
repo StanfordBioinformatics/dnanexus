@@ -28,19 +28,16 @@ parser.add_argument('-u',"--user-name",required=True,help="The DNAnexus login us
 parser.add_argument('-l','--access-level',required=True,choices=["VIEW","UPLOAD","CONTRIBUTE","ADMINISTER"],help="Permissions level the new member should have on shared projects.")
 parser.add_argument('-o',"--org",required=True,help="The name of the DNAnexus organization that the projects belong to.")
 parser.add_argument("--created-after",required=True,help="Date (e.g. 2012-01-01) or integer timestamp after which the project was created (negative number means in the past, or use suffix s, m, h, d, w, M, y)")
+parser.add_argument("--log-file",required=True,help="The name of the log file.")
 
 args = parser.parse_args()
 org = args.org
 user = args.user_name
-level = args.access_level
+access_level = args.access_level
 created_after = args.created_after
-
-#LOG into DNAnexus (The environment module gbsc/gbsc_dnanexus should also be loaded in order to log into DNAnexus)
-subprocess.check_call("log_into_dnanexus.sh -u {du}".format(du=user),shell=True)
-internal_dx_username = "user-" + user
+logfile = args.log_file
 
 script_dir,script_name = os.path.dirname(__file__),os.path.basename(__file__)
-logfile = os.path.join(script_dir,"log_" + user + "_" + os.path.splitext(script_name)[1] + ".txt")
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -54,17 +51,7 @@ chandler.setFormatter(formatter)
 logger.addHandler(fhandler)
 logger.addHandler(chandler)
 
-#get projects since created_after date
-gen = dxpy.org_find_projects(org_id=org,created_after=created_after)
-#gen is a generator of dicts of the form 
-# {u'level': u'NONE', u'id': u'project-ByQ8kj8028GJ182PZx95Z3G2', u'public': False}
-
-#invite user to projects
-for i in gen:
-	current_level = i["level"]
-	if current_level != level:
-		project = dxpy.DXProject(i["id"])
-		project.invite(invitee=internal_dx_username,level=level,send_email=False)
-		logger.info("Invited {user} to {project_name} with level {level}.".format(user=internal_dx_username,project_name=project.name,level=level))	
-
-
+utils = gbsc_dnanexus.utils.Utils(dx_user_name=user)
+invited_projects = utils.invite_user_to_org_projects(org=org,created_after=created_after,access_level=access_level)
+for i in invited_projects:
+	logger.info("Invited {user} to {project} with level {access_level}.".format(user=user,project=i,access_level=access_level))
