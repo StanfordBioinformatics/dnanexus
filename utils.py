@@ -114,7 +114,8 @@ class Utils:
 									member should have on shared projects. See https://wiki.dnanexus.com/API-Specification-v1.0.0/Project-Permissions-and-Sharing for details on the different access levels.
 							 send_email - bool. True means to let the dxpy API send an email notification to the user for each project they are
 									invited to.
-		Returns  : list of the projects that the user was invited to.
+		Returns  : dict. where the keys are the names of the projects that the user was invited to, and the values are the IDs of
+							 the projects.
 		"""
 		org = add_dx_orgprefix(org)
 		invitee = add_dx_userprefix(invitee)
@@ -122,13 +123,13 @@ class Utils:
 		gen = dxpy.org_find_projects(org_id=org,created_after=created_after)
 		#gen is a generator of dicts of the form 
 		# {u'level': u'NONE', u'id': u'project-ByQ8kj8028GJ182PZx95Z3G2', u'public': False}
-		projects_invited_to = []
+		projects_invited_to = {}
 		for i in gen:
 			current_level = i["level"]
 			if current_level != access_level:
 				project = dxpy.DXProject(i["id"])
 				project.invite(invitee=invitee,level=access_level,send_email=send_email)
-				projects_invited_to.append(project.name)
+				projects_invited_to[project.name] = project.id
 		return projects_invited_to
 	
 	
