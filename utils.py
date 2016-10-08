@@ -1,4 +1,5 @@
 import subprocess
+import os
 
 import dxpy
 
@@ -6,6 +7,7 @@ import gbsc_dnanexus #environment module gbsc/gbsc_dnanexus/current
 
 CONF_FILE = gbsc_dnanexus.CONF_FILE
 JSON_CONF = gbsc_dnanexus.JSON_CONF
+SCRIPTS_DIR = os.path.join(os.path.dirname(__file__),"scripts")
 
 DX_USER_PREFIX = "user-"
 DX_ORG_PREFIX = "org-"
@@ -89,7 +91,8 @@ def log_into_dnanexus(dx_username):
 	validate_username(dx_username,exception=True)
 
 	#"module load gbsc/dnanexus/current" to get the script log_into_dnanexus.sh
-	subprocess.check_call("log_into_dnanexus.sh -u {du}".format(du=dx_username),shell=True)
+	script = os.path.join(SCRIPTS_DIR,"log_into_dnanexus.sh")
+	subprocess.check_call("{script} -u {du}".format(script=script,du=dx_username),shell=True)
 
 class Utils:
 	def __init__(self,dx_username):
