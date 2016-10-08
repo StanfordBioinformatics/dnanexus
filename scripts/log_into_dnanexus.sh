@@ -15,6 +15,8 @@
 #					 This is set by loading the environment module gbsc/gbsc_dnanexus/current.
 ###
 
+DX_LOGIN_CONF=$(pwd)/../dnanexus_conf.json
+
 source $DXT 
 module load jq/1.5
 
