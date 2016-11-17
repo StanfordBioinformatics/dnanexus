@@ -18,7 +18,6 @@
 DX_LOGIN_CONF=$(dirname ${0})/../dnanexus_conf.json
 
 source $DXT 
-module load jq/1.5
 
 set -eu -o pipefail
 
