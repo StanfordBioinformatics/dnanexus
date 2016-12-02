@@ -140,7 +140,7 @@ def select_newest_project(dx_project_ids):
 	""" 
 	Function : Given a list of DNAnexus project IDs, returns the one that is newest as determined by creation date.
 	Args     : dx_project_ids: list of DNAnexus project IDs.
-	Returns  : str.
+	Returns  : dxpy.DXProject instance.
 	"""
 	if len(dx_project_ids) == 1:
 	  return dx_project_ids[0]
