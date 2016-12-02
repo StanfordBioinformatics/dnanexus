@@ -136,3 +136,17 @@ class Utils:
 		return projects_invited_to
 	
 	
+def select_newest_project(dx_project_ids):
+	""" 
+	Function : Given a list of DNAnexus project IDs, returns the one that is newest as determined by creation date.
+	Args     : dx_project_ids: list of DNAnexus project IDs.
+	Returns  : str.
+	"""
+	if len(dx_project_ids) == 1:
+	  return dx_project_ids[0]
+	
+	projects = [dxpy.DXProject(x) for x in dx_project_ids]
+	created_times = [x.describe()["created"] for x in projects]
+	paired = zip(created_times,projects)
+	paired.sort(reverse=True)
+	return paired[0][0]
