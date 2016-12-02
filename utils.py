@@ -149,4 +149,4 @@ def select_newest_project(dx_project_ids):
 	created_times = [x.describe()["created"] for x in projects]
 	paired = zip(created_times,projects)
 	paired.sort(reverse=True)
-	return paired[0][0]
+	return paired[0][1]
