@@ -18,6 +18,15 @@ class UnknownDNAnexusUsername(Exception):
 class InvalidAuthToken(Exception):
 	pass
 
+
+def add_props_to_file(project_id,file_id,props):
+	"""
+	Args: project_id - The DNAnexus project ID in which file_id belongs.
+				file_id    - The ID of the file in DNAnexus to which the props are to be added.
+				props      - dict. The props to add to the file.
+	"""
+	dxpy.api.file_set_properties(object_id=file_id,input_params={"project": project_id,"properties": props})	
+
 def strip_dx_userprefix(dx_username):
 	if dx_username.startswith(DX_USER_PREFIX):
 		dx_username = dx_username.split(DX_USER_PREFIX)[1]
