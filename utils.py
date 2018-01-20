@@ -6,7 +6,6 @@ import dxpy
 import gbsc_dnanexus #environment module gbsc/gbsc_dnanexus/current
 
 CONF_FILE = gbsc_dnanexus.CONF_FILE
-JSON_CONF = gbsc_dnanexus.JSON_CONF
 SCRIPTS_DIR = os.path.join(os.path.dirname(__file__),"scripts")
 
 DX_USER_PREFIX = "user-"
@@ -18,6 +17,21 @@ class UnknownDNAnexusUsername(Exception):
 class InvalidAuthToken(Exception):
 	pass
 
+def get_dx_username(strip_prefix=False):
+  """
+  Uses the API token specified in the DX_SECURITY_CONTEXT environment variable (http://autodoc.dnanexus.com/bindings/python/current/dxpy.html?highlight=token).
+  You can set this variable as follows un Unix platforms: 
+    export DX_SECURITY_CONTEXT="{\"auth_token_type\": \"Bearer\", \"auth_token\": \"your_token\"}"
+
+  Args: strip_prefix: bool. True means to strip out the DNAnexus prefix added to all user names, being 'user-'. 
+  """
+  env_var = "DX_SECURITY_CONTEXT"
+  if not env_var in os.environ:
+    raise DxApiKeyNotFound
+  user = dxpy.whoami()
+  if strip_prefix:
+    return user.split("-")[-1]
+  return user
 
 def add_props_to_file(project_id,file_id,props):
 	"""
@@ -65,84 +79,38 @@ def validate_billed_to_prefix(billing_account_id,exception=False):
 			return False
 	return True
 
-def validate_username(dx_username,exception=False):
+
+def invite_user_to_org_projects(self,org,invitee,created_after,access_level,send_email=False):
 	"""
-	Function : Checks to see if the supplied username appears in the dnanexus_conf.json configuration file and has an authentication token associated with it.
-  Args     : dx_username - str. The DNAnexus login name.
-						 exception - bool. When set to true, a gbsc_dnanexus.utils.UnknownDNAnexusUsername() will be raised if 'dx_username' doesn't appear in dnanexus_conf.json. 
-												 gbsc_dnanexus.utils.InvalidAuthToken() will be instead raised if 'dx_username' does appear in dnanexus_conf.json, but there isn't an 
-												 associated API token. If 'exception' is set to False, then False will be returned rather than raising either of these exceptions.
-	Returns  : bool.
-	Raises   : If 'exception' is set to True, a gbsc_dnanexus.utils.UnknownDNAnexusUsername() exception or a gbsc_dnanexus.utils.InvalidAuthToken() exception could be raised.
+	Function : Invites the specified DNAnexus user (the invitee) to all projects in the specified org with the specified access level. 
+					   The dxpy invite method call is idempotent, nonetheless, only projects belonging to the org where the invitee 
+						 doesn't have the specified access level are processed. Note that the user making this called should be an admin
+						 of the org - thus the instantiation of this class should be with dx_username set to a DNAnexus admin user name.
+	Args     : created_after : Date (e.g. 2012-01-01) or integer timestamp after which the project was created 
+							  (negative number means in the past, or use suffix s, m, h, d, w, M, y)")
+						 org - str. The name of the DNAnexus org to search for projects to invite the user to. 
+						 invitee - str. The login name of the DNAnexus user to receive the invitations to the projects in the org. 
+						 access_level  : str. One of ["VIEW","UPLOAD","CONTRIBUTE","ADMINISTER"], which specifies the ermission level the new 
+								member should have on shared projects. See https://wiki.dnanexus.com/API-Specification-v1.0.0/Project-Permissions-and-Sharing for details on the different access levels.
+						 send_email - bool. True means to let the dxpy API send an email notification to the user for each project they are
+								invited to.
+	Returns  : dict. where the keys are the names of the projects that the user was invited to, and the values are the IDs of
+						 the projects.
 	"""
-	dx_username = strip_dx_userprefix(dx_username)
-	if dx_username not in JSON_CONF:
-		if not exception:
-			return False
-		else:
-			raise UnknownDNAnexusUsername("{username} is not recognized. Please make sure that the username is entered into {CONF_FILE}".format(username=dx_username,CONF_FILE=CONF_FILE))
-	if not JSON_CONF[dx_username]:
-		if not exception:
-			return False
-		else:
-			raise InvalidAuthToken("{username} does exist in {CONF_FILE}, but it doesn't have an authentication token specified.".format(username=dx_username,CONF_FILE=CONF_FILE))
-	return True
-
-
-def log_into_dnanexus(dx_username):
-	""" 
-	Function : Logs a user into DNAnexus.
-	Args     : dx_username - str. The login name of a DNAnexus user.
-	Returns  : None.
-	Raises   : subprocess.CalledProcessError if logging in fails.
-	"""
-	dx_username = strip_dx_userprefix(dx_username)	
-	validate_username(dx_username,exception=True)
-
-	#"module load gbsc/dnanexus/current" to get the script log_into_dnanexus.sh
-	script = os.path.join(SCRIPTS_DIR,"log_into_dnanexus.sh")
-	subprocess.check_call("{script} -u {du}".format(script=script,du=dx_username),shell=True)
-
-class Utils:
-	def __init__(self,dx_username):
-		"""
-		Args : dx_username - The login name of the DNAnexus user.
-		"""
-		log_into_dnanexus(dx_username)
-		dx_username = add_dx_userprefix(dx_username)
-		self.dx_username = dx_username
-
-	def invite_user_to_org_projects(self,org,invitee,created_after,access_level,send_email=False):
-		"""
-		Function : Invites the specified DNAnexus user (the invitee) to all projects in the specified org with the specified access level. 
-						   The dxpy invite method call is idempotent, nonetheless, only projects belonging to the org where the invitee 
-							 doesn't have the specified access level are processed. Note that the user making this called should be an admin
-							 of the org - thus the instantiation of this class should be with dx_username set to a DNAnexus admin user name.
-		Args     : created_after : Date (e.g. 2012-01-01) or integer timestamp after which the project was created 
-								  (negative number means in the past, or use suffix s, m, h, d, w, M, y)")
-							 org - str. The name of the DNAnexus org to search for projects to invite the user to. 
-							 invitee - str. The login name of the DNAnexus user to receive the invitations to the projects in the org. 
-							 access_level  : str. One of ["VIEW","UPLOAD","CONTRIBUTE","ADMINISTER"], which specifies the ermission level the new 
-									member should have on shared projects. See https://wiki.dnanexus.com/API-Specification-v1.0.0/Project-Permissions-and-Sharing for details on the different access levels.
-							 send_email - bool. True means to let the dxpy API send an email notification to the user for each project they are
-									invited to.
-		Returns  : dict. where the keys are the names of the projects that the user was invited to, and the values are the IDs of
-							 the projects.
-		"""
-		org = add_dx_orgprefix(org)
-		invitee = add_dx_userprefix(invitee)
-		#get projects since created_after date
-		gen = dxpy.org_find_projects(org_id=org,created_after=created_after)
-		#gen is a generator of dicts of the form 
-		# {u'level': u'NONE', u'id': u'project-ByQ8kj8028GJ182PZx95Z3G2', u'public': False}
-		projects_invited_to = {}
-		for i in gen:
-			current_level = i["level"]
-			if current_level != access_level:
-				project = dxpy.DXProject(i["id"])
-				project.invite(invitee=invitee,level=access_level,send_email=send_email)
-				projects_invited_to[project.name] = project.id
-		return projects_invited_to
+	org = add_dx_orgprefix(org)
+	invitee = add_dx_userprefix(invitee)
+	#get projects since created_after date
+	gen = dxpy.org_find_projects(org_id=org,created_after=created_after)
+	#gen is a generator of dicts of the form 
+	# {u'level': u'NONE', u'id': u'project-ByQ8kj8028GJ182PZx95Z3G2', u'public': False}
+	projects_invited_to = {}
+	for i in gen:
+		current_level = i["level"]
+		if current_level != access_level:
+			project = dxpy.DXProject(i["id"])
+			project.invite(invitee=invitee,level=access_level,send_email=send_email)
+			projects_invited_to[project.name] = project.id
+	return projects_invited_to
 	
 	
 def select_newest_project(dx_project_ids):
