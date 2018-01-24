@@ -15,12 +15,7 @@ import logging
 
 import dxpy
 
-import gbsc_dnanexus
-
-
-#The environment module gbsc/gbsc_dnanexus/current should also be loaded in order to log into DNAnexus
-
-DX_LOGIN_CONF = gbsc_dnanexus.CONF_FILE
+import gbsc_dnanexus.utils
 
 description = "Invites a DNAnexus user to be a member of all projects billed to the specified org, with the specified access level."
 parser = ArgumentParser(description=description)
