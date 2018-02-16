@@ -20,7 +20,7 @@ import argparse
 import subprocess
 import logging
 
-import dxpy
+#import dxpy
 
 import gbsc_dnanexus.utils
 

@@ -19,7 +19,7 @@ You can set this variable as follows un Unix platforms::
 import subprocess
 import os
 
-import dxpy
+#import dxpy
 
 DX_USER_PREFIX = "user-"
 DX_ORG_PREFIX = "org-"
