@@ -1,0 +1,145 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>invite_user_to_projects &#8212; GBSC Dnanexus 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="invite-user-to-projects">
+<h1>invite_user_to_projects<a class="headerlink" href="#invite-user-to-projects" title="Permalink to this headline">¶</a></h1>
+<p>Invites a DNAnexus user to be a member of all projects (that the current user has access to in the
+specified org) with the specified access level. Typically used by an admin to invite himself to 
+all projects in the org, since by default an admin can’t access projects in the org that aren’t
+shared with him.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">invite_user_to_projects</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="n">INVITEE</span><span class="p">]</span> <span class="o">-</span><span class="n">l</span>
+                                  <span class="p">{</span><span class="n">VIEW</span><span class="p">,</span><span class="n">UPLOAD</span><span class="p">,</span><span class="n">CONTRIBUTE</span><span class="p">,</span><span class="n">ADMINISTER</span><span class="p">}</span> <span class="o">-</span><span class="n">o</span> <span class="n">ORG</span>
+                                  <span class="o">--</span><span class="n">created</span><span class="o">-</span><span class="n">after</span> <span class="n">CREATED_AFTER</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">file</span>
+                                  <span class="n">LOG_FILE</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments">
+<h2>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h2>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>-i, --invitee</kbd></td>
+<td><blockquote class="first last">
+<div>The username of the DNAnexus user to invite to join the projects owned by the org specified by
+<code class="docutils literal notranslate"><span class="pre">--org</span></code>. You need to be an admin of the org in order to accomplish this. You can even
+specify your own username, since even admins don’t have access to projects within the org,
+unless they invite themselves or someone else does. If you want to use your username, you can
+just omit this option as it will default to the username idenfified by the API key stored in
+the environment.</div></blockquote>
+</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>-l, --access-level</kbd></td>
+</tr>
+<tr><td>&#160;</td><td><p class="first">Possible choices: VIEW, UPLOAD, CONTRIBUTE, ADMINISTER</p>
+<blockquote class="last">
+<div>Permissions level the new member should have on shared projects.</div></blockquote>
+</td></tr>
+<tr><td class="option-group">
+<kbd>-o, --org</kbd></td>
+<td><blockquote class="first last">
+<div>The name of the DNAnexus organization that the projects belong to.</div></blockquote>
+</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>--created-after</kbd></td>
+</tr>
+<tr><td>&#160;</td><td><blockquote class="first last">
+<div>Date (e.g. 2012-01-01) or integer timestamp after which the project was created (negative number means in the past, or use suffix s, m, h, d, w, M, y)</div></blockquote>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--log-file</kbd></td>
+<td>The name of the log file.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">invite_user_to_projects</a><ul>
+<li><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/scripts/invite_user_to_projects.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Nathaniel Watson.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/scripts/invite_user_to_projects.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
