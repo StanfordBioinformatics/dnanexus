@@ -1,2 +1,4 @@
 dnanexus_conf.json
 *.pyc
+docs/_build
+docs/_templates
