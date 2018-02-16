@@ -1,4 +1,4 @@
-gbsc\_dnanexus.utils
+gbsc\_dnanexus\.utils
 ====================
 
 .. automodule:: gbsc_dnanexus.utils
