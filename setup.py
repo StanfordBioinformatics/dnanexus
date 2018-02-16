@@ -15,7 +15,7 @@ setup(
   url = "https://github.com/StanfordBioinformatics/gbsc_dnanexus",
   packages = ["gbsc_dnanexus"],
   install_requires = [
-    "dxyp",
-  ]
+    "dxpy",
+  ],
   scripts = ["gbsc_utils/scripts/invite_user_to_projects.py"]
 )
