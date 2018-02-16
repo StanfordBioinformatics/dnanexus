@@ -12,7 +12,6 @@ Scripts
 .. toctree::
     :maxdepth: 1
    
-    scripts/invite_user_to_projects
 
 Client API Modules
 ------------------
