@@ -17,5 +17,5 @@ setup(
   install_requires = [
     "dxpy",
   ],
-  scripts = ["gbsc_utils/scripts/invite_user_to_projects.py"]
+  scripts = ["gbsc_dnanexus/scripts/invite_user_to_projects.py"]
 )
