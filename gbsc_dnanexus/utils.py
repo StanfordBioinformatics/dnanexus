@@ -1,7 +1,10 @@
-import subprocess
-import os
-
-import dxpy
+# -*- coding: utf-8 -*-                                                                                
+                                                                                                       
+###                                                                                                    
+# © 2018 The Board of Trustees of the Leland Stanford Junior University                                
+# Nathaniel Watson                                                                                     
+# nathankw@stanford.edu                                                                                
+### 
 
 """
 Contains useful tools for working with DNAnexus.
@@ -13,6 +16,10 @@ You can set this variable as follows un Unix platforms::
 
 """
 
+import subprocess
+import os
+
+import dxpy
 
 DX_USER_PREFIX = "user-"
 DX_ORG_PREFIX = "org-"
