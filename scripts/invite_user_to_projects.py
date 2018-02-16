@@ -7,6 +7,13 @@
 #nathankw@stanford.edu
 ###
 
+"""
+Invites a DNAnexus user to be a member of all projects (that the current user has access to in the
+specified org) with the specified access level. Typically used by an admin to invite himself to 
+all projects in the org, since by default an admin can't access projects in the org that aren't
+shared with him.
+"""
+
 import os
 import sys
 from argparse import ArgumentParser
@@ -17,8 +24,7 @@ import dxpy
 
 import gbsc_dnanexus.utils
 
-description = "Invites a DNAnexus user to be a member of all projects billed to the specified org, with the specified access level."
-parser = ArgumentParser(description=description)
+parser = ArgumentParser(description=__doc__)
 parser.add_argument("-i","--invitee",help="The username of the DNAnexus user to invite to join the projects owned by the org specified by --org. You need to be an admin of the org in order to accomplish this. You can even specify your own username, since even admins don't have access to projects within the org, unless they invite themselves or someone else does. If you want to use your username, you can just omit this option as it will default to the username idenfified by the API key stored in the environment.")
 parser.add_argument('-l','--access-level',required=True,choices=["VIEW","UPLOAD","CONTRIBUTE","ADMINISTER"],help="Permissions level the new member should have on shared projects.")
 parser.add_argument('-o',"--org",required=True,help="The name of the DNAnexus organization that the projects belong to.")
