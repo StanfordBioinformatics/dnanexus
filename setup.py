@@ -7,7 +7,7 @@
 from distutils.core import setup
 
 setup(
-  name = "gbsc_dnanexus",
+  name = "gbsc dnanexus",
   version = "0.1.0",
   description = "DNAnexus utilities",
   author = "Nathaniel Watson",
