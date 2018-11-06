@@ -1,9 +1,0 @@
-2016-08-18 12:00:10,228:__main__:INFO:   Invited user-nathankw to 160720_PINKERTON_0408_BC8MV4ACXX_L1_HEK-ZNF100 with level ADMINISTER.
-2016-08-18 12:00:10,515:__main__:INFO:   Invited user-nathankw to 160720_PINKERTON_0408_BC8MV4ACXX_L2_HEK-ZNF101 with level ADMINISTER.
-2016-08-31 12:00:52,762:__main__:INFO:   Invited user-nathankw to 160817_MARPLE_0361_AC8MWJACXX_L4_SReq-994 with level ADMINISTER.
-2016-08-31 12:00:53,041:__main__:INFO:   Invited user-nathankw to 160817_MARPLE_0361_AC8MWJACXX_L6_SReq-996 with level ADMINISTER.
-2016-08-31 12:00:53,376:__main__:INFO:   Invited user-nathankw to 160817_MARPLE_0361_AC8MWJACXX_L2_SReq-992 with level ADMINISTER.
-2016-08-31 12:00:53,701:__main__:INFO:   Invited user-nathankw to 160803_MONK_0482_BC8PV4ACXX_L5_SReq-993 with level ADMINISTER.
-2016-08-31 12:00:53,986:__main__:INFO:   Invited user-nathankw to 160803_MONK_0482_BC8PV4ACXX_L4_SReq-992 with level ADMINISTER.
-2016-09-07 12:00:37,173:__main__:INFO:   Invited user-nathankw to 160817_MARPLE_0361_AC8MWJACXX_L5_SReq-995 with level ADMINISTER.
-2016-09-14 12:00:11,198:__main__:INFO:   Invited user-nathankw to 160708_GADGET_0056_AHF23WBBXX_L3_SReq-984_withbarcode2 with level ADMINISTER.
