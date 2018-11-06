@@ -62,8 +62,6 @@ def add_props_to_file(project_id,file_id,props):
   An existing property can also be removed by setting its value to the None object in the passed-in
   `props` dictionary.
   
-  
-  
   Args: 
       project_id: `str`. The DNAnexus project ID in which file_id belongs.
       file_id: `str`. The ID of the file in DNAnexus to which the props are to be added.
